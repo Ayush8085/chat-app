@@ -16,8 +16,7 @@ app.use("/api/v1/auth", authRoute);
 // ------------- ERROR MIDDLEWARE -------------
 app.use(errorMiddleware);
 
-
 // ------------- LISTENING TO SERVER -------------
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });

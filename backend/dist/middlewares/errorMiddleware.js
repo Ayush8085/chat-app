@@ -12,7 +12,7 @@ const errorMiddleware = (err, req, res, next) => __awaiter(void 0, void 0, void 
     const statusCode = req.statusCode ? req.statusCode : 500;
     res.status(statusCode).json({
         message: err.message,
-        stack: NODE_ENV === "development" ? err.stack : null
+        stack: NODE_ENV === "development" ? err.stack : null,
     });
 });
 export default errorMiddleware;
