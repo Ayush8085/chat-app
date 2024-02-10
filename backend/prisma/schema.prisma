@@ -20,4 +20,22 @@ model User {
   password  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  // Relations
+  senderMessages   Message[] @relation("senderMessages")
+  recieverMessages Message[] @relation("recieverMessages")
+}
+
+// -------------- MESSAGE --------------
+model Message {
+  id        String   @id @default(uuid())
+  message   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  sender     User   @relation("senderMessages", fields: [senderId], references: [id])
+  senderId   String
+  reciever   User   @relation("recieverMessages", fields: [recieverId], references: [id])
+  recieverId String
 }

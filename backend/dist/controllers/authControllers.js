@@ -120,11 +120,8 @@ const loginUser = asyncHandler((req, res) => __awaiter(void 0, void 0, void 0, f
 }));
 // -------------- LOGOUT ---------------
 const logoutUser = asyncHandler((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    res
-        .status(200)
-        .cookie('token', '', { maxAge: 0 })
-        .json({
-        message: 'Logout successfully!!'
+    res.status(200).cookie("token", "", { maxAge: 0 }).json({
+        message: "Logout successfully!!",
     });
 }));
 export { signupUser, loginUser, logoutUser };
