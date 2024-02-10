@@ -1,6 +1,5 @@
 import { RequestHandler } from "express";
 import asyncHandler from "express-async-handler";
-import z from "zod";
 import prisma from "../prisma.js";
 
 // -------------- SEND MESSAGE ---------------
@@ -35,4 +34,27 @@ const sendMessage: RequestHandler = asyncHandler(async (req, res) => {
   });
 });
 
-export { sendMessage };
+// -------------- SEND MESSAGE ---------------
+const getMessages: RequestHandler = asyncHandler(async (req, res) => {
+  const recieverId = req.params.id;
+  const senderId = req.user.id;
+
+  // Get all messages
+  const messages = await prisma.message.findMany({
+    where: {
+      OR: [
+        { senderId, recieverId },
+        {
+          senderId: recieverId,
+          recieverId: senderId,
+        },
+      ],
+    },
+  });
+
+  res.status(200).json({
+    messages,
+  });
+});
+
+export { sendMessage, getMessages };
