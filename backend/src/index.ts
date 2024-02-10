@@ -2,6 +2,7 @@ import express from "express";
 import cookieParser from "cookie-parser";
 import authRoute from "./routes/authRoutes.js";
 import messageRoute from "./routes/messageRoutes.js";
+import userRoute from "./routes/userRoutes.js";
 import { PORT } from "./config.js";
 import errorMiddleware from "./middlewares/errorMiddleware.js";
 import authMiddleware from "./middlewares/authMiddleware.js";
@@ -15,6 +16,7 @@ app.use(cookieParser());
 // ------------- ROUTES MIDDLEWARES -------------
 app.use("/api/v1/auth", authRoute);
 app.use("/api/v1/messages", authMiddleware, messageRoute);
+app.use("/api/v1/users", authMiddleware, userRoute);
 
 // ------------- ERROR MIDDLEWARE -------------
 app.use(errorMiddleware);
