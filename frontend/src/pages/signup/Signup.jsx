@@ -1,7 +1,54 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { toast } from 'react-hot-toast'
+import { BACKEND_URI } from '../../App';
+import { useAuthContext } from '../../hooks/useAuth';
 
 const Signup = () => {
+    const [isLoading, setIsloading] = useState(false);
+    const [inputs, setInputs] = useState({
+        fullName: '',
+        username: '',
+        gender: '',
+        password: '',
+        password2: '',
+    })
+    const { setAuthUser } = useAuthContext();
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        const { fullName, username, gender, password, password2 } = inputs;
+
+        if (!fullName || !username || !gender || !password || !password2) {
+            return toast.error("All fields are required");
+        }
+        if (password !== password2) {
+            return toast.error("Passwords do not match");
+        }
+
+        setIsloading(true);
+        try {
+            const response = await fetch(`${BACKEND_URI}/api/v1/auth/signup`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ fullName, username, gender, password, password2 })
+            })
+
+            const data = await response.json();
+            if (data.error) {
+                throw new Error(data.error);
+            }
+
+            localStorage.setItem('auth-user', JSON.stringify(data));
+            setAuthUser(data);
+        } catch (error) {
+            return toast.error(error);
+        } finally {
+            setIsloading(false);
+        }
+    }
+
     return (
         <div className='min-h-fit max-w-fit bg-white flex flex-col text-center p-8 rounded-2xl'>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-10 h-10 self-center">
@@ -9,33 +56,41 @@ const Signup = () => {
             </svg>
 
             <h1 className="text-3xl font-bold">Sign Up</h1>
-            <form className=' flex flex-col gap-4 my-4'>
+            <form onSubmit={handleSubmit} className=' flex flex-col gap-4 my-4'>
                 <input
                     type="text"
                     name="fullName"
                     placeholder='Full name'
+                    value={inputs.fullName}
+                    onChange={(e) => setInputs({ ...inputs, fullName: e.target.value })}
                     className='p-4 bg-slate-100 rounded-2xl outline-none text-xl text-slate-600' />
                 <input
                     type="text"
                     name="username"
                     placeholder='Username'
+                    value={inputs.username}
+                    onChange={(e) => setInputs({ ...inputs, username: e.target.value })}
                     className='p-4 bg-slate-100 rounded-2xl outline-none text-xl text-slate-600' />
                 <input
                     type="password"
                     name="password"
                     placeholder='Password'
+                    value={inputs.password}
+                    onChange={(e) => setInputs({ ...inputs, password: e.target.value })}
                     className='p-4 bg-slate-100 rounded-2xl outline-none text-xl text-slate-600' />
                 <input
                     type="password"
                     name="password2"
                     placeholder='Confirm Password'
+                    value={inputs.password2}
+                    onChange={(e) => setInputs({ ...inputs, password2: e.target.value })}
                     className='p-4 bg-slate-100 rounded-2xl outline-none text-xl text-slate-600' />
 
                 <div className='flex'>
                     <label className='mx-1 text-slate-500'>Male</label>
-                    <input type="radio" name="gender" value='male' />
+                    <input type="radio" name="gender" value='male' onChange={(e) => setInputs({ ...inputs, gender: e.target.value })} />
                     <label className='mx-1 text-slate-500'>Female</label>
-                    <input type="radio" name="gender" value='female' />
+                    <input type="radio" name="gender" value='female' onChange={(e) => setInputs({ ...inputs, gender: e.target.value })} />
                 </div>
 
                 <button type="submit" className=' bg-slate-600 text-white p-4 rounded-2xl outline-none text-xl'>Sign Up</button>
