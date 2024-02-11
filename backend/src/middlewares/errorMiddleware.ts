@@ -5,7 +5,7 @@ const errorMiddleware: ErrorRequestHandler = async (err, req, res, next) => {
   const statusCode = req.statusCode ? req.statusCode : 500;
 
   res.status(statusCode).json({
-    message: err.message,
+    error: err.message,
     stack: NODE_ENV === "development" ? err.stack : null,
   });
 };

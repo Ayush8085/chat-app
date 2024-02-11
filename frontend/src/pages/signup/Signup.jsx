@@ -37,7 +37,7 @@ const Signup = () => {
 
             const data = await response.json();
             if (data.error) {
-                throw new Error(data.error);
+                return toast.error(data.error);
             }
 
             localStorage.setItem('auth-user', JSON.stringify(data));

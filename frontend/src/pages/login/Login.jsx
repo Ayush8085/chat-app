@@ -1,8 +1,49 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { toast } from 'react-hot-toast'
+import { useAuthContext } from '../../hooks/useAuth';
+import { BACKEND_URI } from '../../App';
 
 
 const Login = () => {
+    const [isLoading, setIsloading] = useState(false);
+    const [inputs, setInputs] = useState({
+        username: '',
+        password: '',
+    })
+    const { setAuthUser } = useAuthContext();
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        const { username, password } = inputs;
+
+        if (!username || !password) {
+            return toast.error("All fields are required");
+        }
+
+        setIsloading(true);
+        try {
+            const response = await fetch(`${BACKEND_URI}/api/v1/auth/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password })
+            })
+            
+            const data = await response.json();
+            if (data.error) {
+                return toast.error(data.error);
+            }
+
+            localStorage.setItem('auth-user', JSON.stringify(data));
+            setAuthUser(data);
+        } catch (error) {
+            return toast.error(error);
+        } finally {
+            setIsloading(false);
+        }
+    }
+
     return (
         <div className='min-h-fit max-w-fit bg-white flex flex-col text-center p-8 rounded-2xl'>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-10 h-10 self-center">
@@ -10,16 +51,20 @@ const Login = () => {
             </svg>
 
             <h1 className="text-3xl font-bold">Login</h1>
-            <form className=' flex flex-col gap-4 my-4'>
+            <form className=' flex flex-col gap-4 my-4' onSubmit={handleSubmit}>
                 <input
                     type="text"
                     name="username"
                     placeholder='Username'
+                    value={inputs.username}
+                    onChange={(e) => setInputs({ ...inputs, username: e.target.value })}
                     className='p-4 bg-slate-100 rounded-2xl outline-none text-xl text-slate-600' />
                 <input
                     type="password"
                     name="password"
                     placeholder='Password'
+                    value={inputs.password}
+                    onChange={(e) => setInputs({ ...inputs, password: e.target.value })}
                     className='p-4 bg-slate-100 rounded-2xl outline-none text-xl text-slate-600' />
                 <button type="submit" className=' bg-slate-600 text-white p-4 rounded-2xl outline-none text-xl'>Login</button>
             </form>
