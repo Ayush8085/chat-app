@@ -27,6 +27,7 @@ const Login = () => {
             const response = await fetch(`${BACKEND_URI}/api/v1/auth/login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
                 body: JSON.stringify({ username, password })
             })
             

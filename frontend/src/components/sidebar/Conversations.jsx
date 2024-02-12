@@ -1,15 +1,45 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Conversation from './Conversation'
+import { toast } from 'react-hot-toast'
+import { BACKEND_URI } from '../../App';
+import useConversation from '../../zustand/useConversation';
 
 const Conversations = () => {
+    const [isLoading, setIsloading] = useState(false);
+    const [users, setUsers] = useState([]);
+
+    useEffect(() => {
+        const getConversationUser = async () => {
+            setIsloading(true);
+            try {
+                const response = await fetch(`${BACKEND_URI}/api/v1/users`, {
+                    credentials: 'include'
+                })
+
+                const data = await response.json();
+                if (data.error) {
+                    return toast.error(data.error);
+                }
+
+                setUsers(data);
+
+            } catch (error) {
+                return toast.error(error);
+            } finally {
+                setIsloading(false);
+            }
+        }
+        getConversationUser();
+    }, [])
+
     return (
-        <div>
-            <Conversation />
-            <Conversation />
-            <Conversation />
-            <Conversation />
-            <Conversation />
-            <Conversation />
+        <div className='overflow-scroll'>
+            {
+                !isLoading ?
+                    (users.map((user) => {
+                        return <Conversation key={user.id} conversation={user} />
+                    })) : null
+            }
         </div>
     )
 }

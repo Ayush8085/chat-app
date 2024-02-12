@@ -1,20 +1,43 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Messages from './Messages'
 import MessageInput from './MessageInput'
+import useConversation from '../../zustand/useConversation';
+import { BACKEND_URI } from '../../App';
+import toast from 'react-hot-toast';
 
 const MessageContainer = () => {
-  const noChatSelected = true;
+  const { messages, setMessages, selectedConversation, setSelectedConversation } = useConversation();
+
+  useEffect(() => {
+    const getAllMessages = async () => {
+      const res = await fetch(`${BACKEND_URI}/api/v1/messages/${selectedConversation.id}`, {
+        credentials: 'include'
+      });
+      const data = await res.json();
+      if (data.error) {
+        return toast.error(data.error);
+      }
+      setMessages(data.messages);
+    }
+    getAllMessages();
+  }, [selectedConversation?.id])
+
+  useEffect(() => {
+
+    return () => setSelectedConversation(null);
+  }, [])
+
   return (
     <div className='flex flex-col justify-between my-6 sm:min-w-[30vw] min-w-fit'>
-      {noChatSelected ? (<NoChatSelected />) : (
+      {!selectedConversation ? (<NoChatSelected />) : (
         <>
           {/* HEADER */}
           <div className="flex justify-center bg-slate-500 text-2xl text-white p-2 rounded-2xl">
-            Peter Parker
+            {selectedConversation.fullName}
           </div>
 
 
-          <Messages />
+          <Messages messages={messages} />
           <MessageInput />
 
         </>

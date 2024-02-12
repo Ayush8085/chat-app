@@ -16,7 +16,7 @@ const LogoutBtn = () => {
             })
             const data = await response.json();
             if (data.error) {
-                throw new Error(data.error);
+                return toast.error(data.error);
             }
             localStorage.removeItem('auth-user');
             setAuthUser(null);
