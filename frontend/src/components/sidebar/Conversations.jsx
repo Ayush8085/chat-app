@@ -17,6 +17,7 @@ const Conversations = () => {
                 })
 
                 const data = await response.json();
+                console.log('DATA: ', data);
                 if (data.error) {
                     return toast.error(data.error);
                 }
