@@ -12,7 +12,7 @@ import { app, server } from "./socket/socket.js";
 // ------------- MIDDLEWARES -------------
 app.use(
   cors({
-    origin: [FRONTEND_URL, 'http://localhost:5173'],
+    origin: ['https://chat-app-ayush8085.vercel.app', 'http://localhost:5173'],
     credentials: true,
   }),
 );
