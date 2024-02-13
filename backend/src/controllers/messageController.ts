@@ -31,8 +31,8 @@ const sendMessage: RequestHandler = asyncHandler(async (req, res) => {
   });
 
   const recieverSocketId = getRecieverSocketId(recieverId);
-  if(recieverSocketId) {
-    io.to(recieverSocketId).emit('newMessage', newMessage);
+  if (recieverSocketId) {
+    io.to(recieverSocketId).emit("newMessage", newMessage);
   }
 
   res.status(201).json({

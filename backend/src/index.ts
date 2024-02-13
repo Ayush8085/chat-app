@@ -6,14 +6,16 @@ import userRoute from "./routes/userRoutes.js";
 import { PORT } from "./config.js";
 import errorMiddleware from "./middlewares/errorMiddleware.js";
 import authMiddleware from "./middlewares/authMiddleware.js";
-import cors from 'cors';
+import cors from "cors";
 import { app, server } from "./socket/socket.js";
 
 // ------------- MIDDLEWARES -------------
-app.use(cors({
-  origin: ['http://localhost:5173'],
-  credentials: true,
-}));
+app.use(
+  cors({
+    origin: ["http://localhost:5173"],
+    credentials: true,
+  }),
+);
 app.use(express.json());
 app.use(cookieParser());
 
