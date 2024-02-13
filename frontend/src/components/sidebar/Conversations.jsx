@@ -13,6 +13,7 @@ const Conversations = () => {
             setIsloading(true);
             try {
                 const response = await fetch(`${BACKEND_URI}/api/v1/users`, {
+                    headers: {'Content-Type': 'application/json'},
                     credentials: 'include'
                 })
 
