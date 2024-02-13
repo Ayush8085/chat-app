@@ -3,7 +3,7 @@ import cookieParser from "cookie-parser";
 import authRoute from "./routes/authRoutes.js";
 import messageRoute from "./routes/messageRoutes.js";
 import userRoute from "./routes/userRoutes.js";
-import { PORT } from "./config.js";
+import { FRONTEND_URL, PORT } from "./config.js";
 import errorMiddleware from "./middlewares/errorMiddleware.js";
 import authMiddleware from "./middlewares/authMiddleware.js";
 import cors from "cors";
@@ -12,7 +12,7 @@ import { app, server } from "./socket/socket.js";
 // ------------- MIDDLEWARES -------------
 app.use(
   cors({
-    origin: ["http://localhost:5173"],
+    origin: [FRONTEND_URL],
     credentials: true,
   }),
 );
