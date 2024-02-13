@@ -37,7 +37,7 @@ const MessageContainer = () => {
           </div>
 
 
-          <Messages messages={messages} />
+          <Messages prop_messages={messages} />
           <MessageInput />
 
         </>

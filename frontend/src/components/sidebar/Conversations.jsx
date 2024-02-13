@@ -33,7 +33,7 @@ const Conversations = () => {
     }, [])
 
     return (
-        <div className='overflow-scroll'>
+        <div className='overflow-scroll h-[60%]'>
             {
                 !isLoading ?
                     (users.map((user) => {

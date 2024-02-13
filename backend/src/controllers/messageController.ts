@@ -1,6 +1,7 @@
 import { RequestHandler } from "express";
 import asyncHandler from "express-async-handler";
 import prisma from "../prisma.js";
+import { getRecieverSocketId, io } from "../socket/socket.js";
 
 // -------------- SEND MESSAGE ---------------
 const sendMessage: RequestHandler = asyncHandler(async (req, res) => {
@@ -28,6 +29,11 @@ const sendMessage: RequestHandler = asyncHandler(async (req, res) => {
       },
     },
   });
+
+  const recieverSocketId = getRecieverSocketId(recieverId);
+  if(recieverSocketId) {
+    io.to(recieverSocketId).emit('newMessage', newMessage);
+  }
 
   res.status(201).json({
     newMessage,

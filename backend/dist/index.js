@@ -7,7 +7,7 @@ import { PORT } from "./config.js";
 import errorMiddleware from "./middlewares/errorMiddleware.js";
 import authMiddleware from "./middlewares/authMiddleware.js";
 import cors from 'cors';
-const app = express();
+import { app, server } from "./socket/socket.js";
 // ------------- MIDDLEWARES -------------
 app.use(cors({
     origin: ['http://localhost:5173'],
@@ -22,6 +22,6 @@ app.use("/api/v1/users", authMiddleware, userRoute);
 // ------------- ERROR MIDDLEWARE -------------
 app.use(errorMiddleware);
 // ------------- LISTENING TO SERVER -------------
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
