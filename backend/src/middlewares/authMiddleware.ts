@@ -6,7 +6,6 @@ import prisma from "../prisma.js";
 
 const authMiddleware: RequestHandler = asyncHandler(async (req, res, next) => {
   const token = req.cookies.token;
-  console.log('TOKEN: ', token);
   
   if (!token) {
     res.status(403);
@@ -18,8 +17,6 @@ const authMiddleware: RequestHandler = asyncHandler(async (req, res, next) => {
     res.status(403);
     throw new Error("Invalid authorization token!!");
   }
-
-  console.log("DECODED.ID: ", decoded);
   
 
   const user = await prisma.user.findUnique({
@@ -35,7 +32,6 @@ const authMiddleware: RequestHandler = asyncHandler(async (req, res, next) => {
       createdAt: true,
     },
   });
-  console.log('AUTH USER: ', user);
   
   if (!user) {
     res.status(404);

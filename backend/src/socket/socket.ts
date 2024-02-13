@@ -9,6 +9,7 @@ const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
     origin: [FRONTEND_URL, 'http://localhost:5173'],
+    methods: ['GET', 'POST'],
     credentials: true,
   },
 });
