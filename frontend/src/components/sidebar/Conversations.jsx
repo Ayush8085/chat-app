@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import Conversation from './Conversation'
 import { toast } from 'react-hot-toast'
 import { BACKEND_URI } from '../../App';
-import useConversation from '../../zustand/useConversation';
 
 const Conversations = () => {
     const [isLoading, setIsloading] = useState(false);
