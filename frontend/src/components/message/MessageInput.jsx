@@ -2,10 +2,12 @@ import React, { useState } from 'react'
 import { toast } from 'react-hot-toast'
 import { BACKEND_URI } from '../../App';
 import useConversation from '../../zustand/useConversation';
+import { useAuthContext } from '../../hooks/useAuth';
 
 const MessageInput = () => {
     const [message, setMessage] = useState('');
     const { messages, setMessages, selectedConversation } = useConversation();
+    const { authUser } = useAuthContext();
 
     const sendMessage = async (e) => {
         e.preventDefault();
@@ -18,7 +20,10 @@ const MessageInput = () => {
             const res = await fetch(`${BACKEND_URI}/api/v1/messages/send/${selectedConversation.id}`, {
                 method: 'POST',
                 credentials: 'include',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `${authUser.token}`
+                },
                 body: JSON.stringify({ message })
             });
 
