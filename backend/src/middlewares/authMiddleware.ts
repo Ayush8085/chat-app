@@ -5,8 +5,13 @@ import { JWT_SECRET } from "../config.js";
 import prisma from "../prisma.js";
 
 const authMiddleware: RequestHandler = asyncHandler(async (req, res, next) => {
-  const token = req.cookies.token;
-  
+  let token = req.cookies.token;
+  if (!token) {
+    token = req.headers.authorization;
+    console.log('TOKEN FROM HEADERS: ', token);
+
+  }
+
   if (!token) {
     res.status(403);
     throw new Error("Authorization token missing!!");
@@ -17,7 +22,7 @@ const authMiddleware: RequestHandler = asyncHandler(async (req, res, next) => {
     res.status(403);
     throw new Error("Invalid authorization token!!");
   }
-  
+
 
   const user = await prisma.user.findUnique({
     where: {
@@ -32,7 +37,7 @@ const authMiddleware: RequestHandler = asyncHandler(async (req, res, next) => {
       createdAt: true,
     },
   });
-  
+
   if (!user) {
     res.status(404);
     throw new Error("User not found!!");

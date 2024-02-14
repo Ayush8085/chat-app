@@ -4,13 +4,19 @@ import MessageInput from './MessageInput'
 import useConversation from '../../zustand/useConversation';
 import { BACKEND_URI } from '../../App';
 import toast from 'react-hot-toast';
+import { useAuthContext } from '../../hooks/useAuth';
 
 const MessageContainer = () => {
   const { messages, setMessages, selectedConversation, setSelectedConversation } = useConversation();
+  const { authUser } = useAuthContext();
 
   useEffect(() => {
     const getAllMessages = async () => {
       const res = await fetch(`${BACKEND_URI}/api/v1/messages/${selectedConversation.id}`, {
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `${authUser.token}`
+       },
         credentials: 'include'
       });
       const data = await res.json();

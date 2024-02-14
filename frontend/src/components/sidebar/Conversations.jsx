@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react'
 import Conversation from './Conversation'
 import { toast } from 'react-hot-toast'
 import { BACKEND_URI } from '../../App';
+import { useAuthContext } from '../../hooks/useAuth';
 
 const Conversations = () => {
     const [isLoading, setIsloading] = useState(false);
+    const { authUser } = useAuthContext();
     const [users, setUsers] = useState([]);
 
     useEffect(() => {
@@ -12,7 +14,10 @@ const Conversations = () => {
             setIsloading(true);
             try {
                 const response = await fetch(`${BACKEND_URI}/api/v1/users`, {
-                    headers: {'Content-Type': 'application/json'},
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `${authUser.token}`
+                    },
                     credentials: 'include'
                 })
 

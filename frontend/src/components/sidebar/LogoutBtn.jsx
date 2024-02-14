@@ -1,18 +1,21 @@
 import React, { useState } from 'react'
 import { BiLogOut } from 'react-icons/bi'
 import { useAuthContext } from '../../hooks/useAuth';
-import {toast} from 'react-hot-toast';
+import { toast } from 'react-hot-toast';
 import { BACKEND_URI } from '../../App';
 
 const LogoutBtn = () => {
     const [isLoading, setIsloading] = useState(false);
-    const { setAuthUser } = useAuthContext();
+    const { authUser, setAuthUser } = useAuthContext();
 
     const handleLogout = async () => {
         setIsloading(true);
         try {
             const response = await fetch(`${BACKEND_URI}/api/v1/auth/logout`, {
-                headers: { 'Content-Type': 'application/json' }
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `${authUser.token}`
+                },
             })
             const data = await response.json();
             if (data.error) {
